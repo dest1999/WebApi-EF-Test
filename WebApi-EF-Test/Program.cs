@@ -1,3 +1,7 @@
+using Microsoft.EntityFrameworkCore;
+using WebApi_EF_Test.DAL;
+using WebApi_EF_Test.Models;
+
 namespace WebApi_EF_Test
 {
     public class Program
@@ -7,6 +11,11 @@ namespace WebApi_EF_Test
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
+            
+            builder.Services.AddDbContext<DataContext>(opt => 
+                opt.UseSqlServer(builder.Configuration.GetConnectionString("MSSQLServer")));
+
+            builder.Services.AddScoped<IRepository<Employee>, EmployeesRepository>();
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

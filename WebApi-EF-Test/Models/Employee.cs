@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WebApi_EF_Test.Models
 {
+    [Table("Employees")]
     [Index(nameof(FIO),IsUnique = true)]
     public class Employee
     {
