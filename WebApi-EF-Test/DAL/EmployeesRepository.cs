@@ -8,19 +8,18 @@ namespace WebApi_EF_Test.DAL
 
         public EmployeesRepository(DataContext DataContext)
         {
-            //TODO добавить логирование если будет время
             dataContext = DataContext;
         }
 
         public int Create(Employee entity)
         {
+            var tmp = dataContext.Employees.Add(entity);
             try
             {
-                var tmp = dataContext.Employees.Add(entity);
                 dataContext.SaveChanges();
                 return tmp.Entity.Id;
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 return -1;
             }
@@ -29,13 +28,20 @@ namespace WebApi_EF_Test.DAL
         public bool Delete(int id)
         {
             Employee employee = Get(id);
-            if (employee == null)
+            if (employee != null)
             {
-                return false;
+                try
+                {
+                    dataContext.Remove(employee);
+                    dataContext.SaveChanges();
+                    return true;
+                }
+                catch (Exception e)
+                {
+
+                }
             }
-            dataContext.Remove(employee);
-            dataContext.SaveChanges();
-            return true;
+            return false;
         }
 
         public Employee Get(int id)
@@ -44,9 +50,19 @@ namespace WebApi_EF_Test.DAL
             return tmp;
         }
 
-        public bool Update(Employee entity)
+        public bool Update(int id, Employee employee)
         {
-            throw new NotImplementedException();
+            employee.Id = id;
+            try
+            {
+                dataContext.Employees.Update(employee);
+                dataContext.SaveChanges();
+                return true;
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
         }
     }
 }

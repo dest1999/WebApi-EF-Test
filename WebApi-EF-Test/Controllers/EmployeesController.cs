@@ -24,6 +24,8 @@ namespace WebApi_EF_Test.Controllers
             int emplTmp = employeeRepository.Create(employee);
             string outMessage = emplTmp < 0? "Employee already exist, cant create" : emplTmp.ToString();
             return Ok(outMessage);
+            //TODO использовать badrequest при ошибке?
+            //возвращаем ок т.к. запрос обработан
         }
 
         // GET api/<EmployeesController>/5
@@ -36,8 +38,11 @@ namespace WebApi_EF_Test.Controllers
 
         // PUT api/<EmployeesController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public IActionResult Put(int id, [FromBody] EmployeeDTO employee)
         {
+            bool isSuccess = employeeRepository.Update(id, employee);
+            string outMessage = !isSuccess ? "Employee already exist, cant modify" : isSuccess.ToString();
+            return Ok(outMessage);
         }
 
         // DELETE api/<EmployeesController>/5
@@ -48,13 +53,5 @@ namespace WebApi_EF_Test.Controllers
             return Ok(isDeleteOk);
         }
 
-
-
-        // GET: api/<EmployeesController>
-        [HttpGet]
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
     }
 }

@@ -7,7 +7,7 @@ namespace WebApi_EF_Test.DAL
         int Create(T entity);
         T Get(int id);
         bool Delete(int id);
-        bool Update(T entity);
+        bool Update(int id, T entity);
 
     }
 }
