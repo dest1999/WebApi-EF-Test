@@ -14,19 +14,34 @@ namespace WebApi_EF_Test.DAL
 
         public int Create(Employee entity)
         {
-            var tmp = dataContext.Employees.Add(entity);
-            dataContext.SaveChanges();
-            return tmp.Entity.Id;
+            try
+            {
+                var tmp = dataContext.Employees.Add(entity);
+                dataContext.SaveChanges();
+                return tmp.Entity.Id;
+            }
+            catch (Exception)
+            {
+                return -1;
+            }
         }
 
         public bool Delete(int id)
         {
-            throw new NotImplementedException();
+            Employee employee = Get(id);
+            if (employee == null)
+            {
+                return false;
+            }
+            dataContext.Remove(employee);
+            dataContext.SaveChanges();
+            return true;
         }
 
         public Employee Get(int id)
         {
-            throw new NotImplementedException();
+            var tmp = dataContext.Employees.Find(id);
+            return tmp;
         }
 
         public bool Update(Employee entity)

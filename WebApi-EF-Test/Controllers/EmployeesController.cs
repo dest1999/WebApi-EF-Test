@@ -22,23 +22,16 @@ namespace WebApi_EF_Test.Controllers
         public IActionResult Post([FromBody] EmployeeDTO employee)
         {
             int emplTmp = employeeRepository.Create(employee);
-            return Ok(emplTmp);
-        }
-
-
-
-        // GET: api/<EmployeesController>
-        [HttpGet]
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
+            string outMessage = emplTmp < 0? "Employee already exist, cant create" : emplTmp.ToString();
+            return Ok(outMessage);
         }
 
         // GET api/<EmployeesController>/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public IActionResult Get(int id)
         {
-            return "value";
+            var tmp = employeeRepository.Get(id);
+            return Ok(tmp);
         }
 
         // PUT api/<EmployeesController>/5
@@ -49,8 +42,19 @@ namespace WebApi_EF_Test.Controllers
 
         // DELETE api/<EmployeesController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public IActionResult Delete(int id)
         {
+            bool isDeleteOk = employeeRepository.Delete(id);
+            return Ok(isDeleteOk);
+        }
+
+
+
+        // GET: api/<EmployeesController>
+        [HttpGet]
+        public IEnumerable<string> Get()
+        {
+            return new string[] { "value1", "value2" };
         }
     }
 }
